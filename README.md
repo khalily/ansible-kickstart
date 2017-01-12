@@ -1,5 +1,5 @@
 # Introdution
-    use ansible to deploy PXE Server with kickstart
+   use ansible to deploy PXE Server with kickstart
 # Usage
 
     $ ansible -i hosts pxe.yml
