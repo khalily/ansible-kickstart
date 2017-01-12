@@ -1,0 +1,4 @@
+---
+
+install_url: http://mirrors.aliyun.com/centos/7.2.1511/os/x86_64/
+pxe_server: 192.168.1.1

@@ -1,0 +1,60 @@
+---
+
+- name: install dep sofware
+  yum: name={{item}} state=present
+  with_items:
+    - dhcp
+    - tftp
+    - tftp-server
+    - xinetd
+    - syslinux
+    - httpd
+
+- name: sync dhcpd.conf
+  template: src=dhcpd.conf dest=/etc/dhcp/dhcpd.conf
+  notify:
+    - restart dhcpd
+
+- name: sync tftp
+  copy: src=tftp dest=/etc/xinetd.d/tftp
+  notify:
+    - restart xinetd
+
+- name: create tftpboot dir
+  file: path=/data/install/tftpboot state=directory
+
+- name: copy pxelinux file
+  copy: src=tftpboot/{{item}} dest=/data/install/tftpboot/
+  with_items:
+    - menu.c32
+    - vesamenu.c32
+    - pxelinux.0
+    - splash.png
+
+- name: create pxelinux.config dir
+  file: path=/data/install/tftpboot/pxelinux.cfg state=directory
+
+- name: copy default cfg to pxelinux.cfg
+  template: src=pxelinux.cfg/default dest=/data/install/tftpboot/pxelinux.cfg/default
+
+- name: create centos7.2 kernel dir
+  file: path=/data/install/tftpboot/kernel/centos7.2 state=directory
+
+- name: copy centos7.2 kernel to tftpboot
+  copy: src=tftpboot/kernel/centos7.2/{{item}} dest=/data/install/tftpboot/kernel/centos7.2/
+  with_items:
+    - vmlinuz
+    - initrd.img
+
+- name: create kickstart dir
+  file: path=/var/www/html/kickstart state=directory mode=755
+
+- name: sync kickstart cfg
+  template: src=kickstart/centos7.2.ks dest=/var/www/html/kickstart/centos7.2.ks mode=644
+
+- name: ensure server running
+  service: name={{item}} state=started enabled=yes
+  with_items:
+    - dhcpd
+    - xinetd
+    - httpd

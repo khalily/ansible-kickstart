@@ -1,0 +1,15 @@
+default vesamenu.c32
+menu background splash.png
+timeout 100
+menu title Welcome to PXE Server System
+
+label local
+  menu label Boot from local drive
+  menu default
+  localboot 0
+
+label centos7.2
+  menu label Boot from PXE Server for Install CentOS 7.2
+  kernel ./kernel/centos7.2/vmlinuz
+  append initrd=./kernel/centos7.2/initrd.img ks=http://{{ pxe_server }}/kickstart/centos7.2.ks inst.repo={{ install_url }}
+

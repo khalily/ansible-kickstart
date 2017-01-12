@@ -1,0 +1,5 @@
+[pxe:vars]
+ansible_ssh_pass=password
+
+[pxe]
+192.168.1.1
