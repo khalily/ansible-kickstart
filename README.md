@@ -2,7 +2,7 @@
    use ansible to deploy PXE Server with kickstart
 # Usage
 
-    $ ansible -i hosts pxe.yml
+    $ ansible-playbook -i hosts pxe.yml
 
 # Config
     $ cat group_vars/all
